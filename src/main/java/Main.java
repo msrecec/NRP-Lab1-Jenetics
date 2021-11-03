@@ -11,7 +11,7 @@ import java.time.Duration;
 public class Main {
     public static void main(String[] args) {
 
-        int N = 8;
+        int N = 30;
 
         final Engine<EnumGene<Integer>, Integer> engine = Engine
                 .builder(
@@ -24,14 +24,13 @@ public class Main {
                 .populationSize(200)
                 .alterers(
                         new SwapMutator<>(0.01),
-                        new PartiallyMatchedCrossover<>(0.01)
+                        new PartiallyMatchedCrossover<>(0.9)
                 )
                 .build();
 
         final Phenotype<EnumGene<Integer>, Integer> best = engine.stream()
-                .limit(200)
-//                .limit(Limits.byFitnessThreshold(N*(N-1)/2))
-//                .limit(Limits.byExecutionTime(Duration.ofMinutes(30)))
+                .limit(Limits.byFitnessThreshold(1))
+                .limit(Limits.byExecutionTime(Duration.ofMinutes(30)))
                 .collect(EvolutionResult.toBestPhenotype());
 
         int[] result = best.genotype().chromosome().stream().mapToInt(EnumGene::allele).toArray();
